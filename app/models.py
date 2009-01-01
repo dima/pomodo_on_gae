@@ -26,7 +26,7 @@ from google.appengine.ext import db
 
 # Some useful module methods
 def all(model):
-  result = '<entities kind="' + model.kind() + '" type="array">\n'
+  result = '<entities kind="%s" type="array">\n' % model.kind()
   for item in model.all():
     result += item.to_xml()
   
