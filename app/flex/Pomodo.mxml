@@ -6,12 +6,9 @@
   <mx:Script>
     <![CDATA[
       import org.ruboss.services.http.GAEHTTPServiceProvider;
-      import org.ruboss.serializers.GAEXMLSerializer;
-      import org.ruboss.Ruboss;
       import pomodo.controllers.ApplicationController;
 
       private function init():void {
-        Ruboss.enableLogging();
         ApplicationController.initialize([GAEHTTPServiceProvider], GAEHTTPServiceProvider.ID);
       }
     ]]>
