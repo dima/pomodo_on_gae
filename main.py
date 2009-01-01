@@ -45,7 +45,7 @@ class AppController(webapp.RequestHandler):
 
 def main():
   application = webapp.WSGIApplication(
-  [('/', AppController), ('/posts.fxml', PostController)],
+  [('/', AppController), ('/posts.*', PostController)],
     debug=True)
   wsgiref.handlers.CGIHandler().run(application)
 
