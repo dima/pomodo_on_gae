@@ -41,7 +41,6 @@ class Controller(restful.Controller):
     restful.send_successful_response(self, post.to_xml())
     
   def put(self, *params):
-    key = self.request.path_info.split("/").pop().replace(".xml", "")
     post = models.Post.get(db.Key(restful.get_model_key(self)))
     models.update_model_from_params(post, self.request.params)
     restful.send_successful_response(self, post.to_xml())
