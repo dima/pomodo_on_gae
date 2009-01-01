@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+  xmlns:generated="pomodo.components.generated.*"
+  paddingBottom="8" paddingLeft="8" paddingRight="8" paddingTop="8"
+  layout="horizontal" styleName="plain" initialize="init()">
+  <mx:Script>
+    <![CDATA[
+      import org.ruboss.services.http.GAEHTTPServiceProvider;
+      import org.ruboss.serializers.GAEXMLSerializer;
+      import org.ruboss.Ruboss;
+      import pomodo.controllers.ApplicationController;
+
+      private function init():void {
+        Ruboss.enableLogging();
+        ApplicationController.initialize([GAEHTTPServiceProvider], GAEHTTPServiceProvider.ID);
+      }
+    ]]>
+  </mx:Script>
+  <mx:LinkBar dataProvider="{mainViewStack}" direction="vertical" borderStyle="solid" backgroundColor="#EEEEEE"/>
+  <mx:ViewStack id="mainViewStack" width="100%" height="100%">
+    <!-- For a simple demo, put all the components here. -->
+    <generated:PostBox/>
+  </mx:ViewStack>
+</mx:Application>
+

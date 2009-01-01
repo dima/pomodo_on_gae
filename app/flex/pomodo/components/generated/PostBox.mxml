@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" label="Post"
+  xmlns:rcomponents="org.ruboss.components.*">
+  <mx:Script><![CDATA[
+    import org.ruboss.Ruboss;
+    import org.ruboss.utils.RubossUtils;
+    import pomodo.models.Post;
+
+    [Bindable]
+    private var _post:Post = new Post();
+
+    private function newPost():void {
+      _post = new Post();
+      postsList.selectedIndex = -1;
+    }
+
+    private function savePost():void {
+      if (_post.id) {
+        updatePost();
+      } else {
+        createPost();
+      }
+    }
+  
+    private function createPost():void {
+      var post:Post = new Post();
+      post.title = titleTextInput.text;
+      post.content = contentTextInput.text;
+
+      post.create({onSuccess: onPostCreate});
+    }
+
+    private function updatePost():void {
+      _post.title = titleTextInput.text;
+      _post.content = contentTextInput.text;
+
+      _post.update({onSuccess: onPostUpdate});
+    }
+
+    private function destroyPost():void {
+      _post.destroy({onSuccess: onPostDestroy});
+    }
+  
+    private function onPostSelect():void {
+      _post = RubossUtils.clone(postsList.selectedItem) as Post;
+    }
+  
+    private function onPostCreate(post:Post):void {
+      _post = new Post;
+    }
+  
+    private function onPostUpdate(post:Post):void {
+      postsList.selectedItem = post;
+      _post = RubossUtils.clone(post) as Post;
+    }
+  
+    private function onPostDestroy(post:Post):void {
+      onPostCreate(post);
+    }
+
+    private function canDeletePost(post:Post):Boolean {
+      return post != null && !RubossUtils.isEmpty(post.id);
+    }
+  ]]></mx:Script>
+  <mx:Panel id="postsPanel"
+    title="Posts" cornerRadius="0" dropShadowEnabled="false" borderStyle="solid" 
+    borderThickness="1" backgroundColor="#EEEEEE" width="25%" height="100%">
+    <mx:List id="postsList"
+      width="100%" height="100%"
+      dataProvider="{Ruboss.models.index(Post)}"
+      change="onPostSelect()"/>
+    <mx:ControlBar width="100%">
+      <mx:Button label="New Post" width="100%" height="30"
+        click="newPost()"/>
+    </mx:ControlBar>
+  </mx:Panel>
+  <mx:Panel title="Edit Post" cornerRadius="0" dropShadowEnabled="false" borderStyle="solid" 
+    borderThickness="1" backgroundColor="#EEEEEE" width="75%" height="100%">
+    <mx:Form width="100%" height="100%">
+      <mx:FormItem label="Title" width="100%">
+        <mx:TextInput id="titleTextInput" width="100%" text="{_post.title}"/>
+      </mx:FormItem>
+      <mx:FormItem label="Content" width="100%">
+        <mx:TextInput id="contentTextInput" width="100%" text="{_post.content}"/>
+      </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar width="100%">
+      <mx:Button label="Save Post" width="50%" height="30"
+        click="savePost()"/>
+      <mx:Button label="Delete Post" width="50%" height="30"
+        enabled="{canDeletePost(_post)}"
+        click="destroyPost()"/>
+    </mx:ControlBar>
+  </mx:Panel>
+</mx:HBox>
