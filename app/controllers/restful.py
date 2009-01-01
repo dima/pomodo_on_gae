@@ -48,7 +48,7 @@ def send_successful_response(handler, response):
     handler.response.out.write(response)
     
 def get_model_key(handler):
-  return handler.request.path_info.split("/").pop().replace(".fxml", "")
+  return handler.request.path_info.split("/").pop().replace(".xml", "")
  
 def get_sent_properties(request_func, propname_list):
     """

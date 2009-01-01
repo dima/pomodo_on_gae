@@ -38,12 +38,16 @@ def update_model_from_params(model, params):
   for k, v in params.items():
     if k.endswith("_id"):
       setattr(model, k.replace("_id", ""), db.Key(v))
-    elif isinstance(getattr(model, k), bool):
-      setattr(model, k, bool(v))
-    elif isinstance(getattr(model, k), datetime.datetime):
-      setattr(model, k, datetime.datetime.now())
-    else:
-      setattr(model, k, v)
+    elif hasattr(model, k):
+      if isinstance(getattr(model, k), bool):
+        if v == "false":
+          setattr(model, k, False)
+        else:
+          setattr(model, k, True)
+      elif isinstance(getattr(model, k), datetime.datetime):
+        setattr(model, k, datetime.datetime.now())
+      else:
+        setattr(model, k, v)
 
   model.put()
 
