@@ -53,7 +53,7 @@ def update_model_from_params(model, params):
 
 class Post(db.Model):
   title = db.StringProperty()
-  content = db.StringProperty()
+  content = db.StringProperty(multiline=True)
   
 class Comment(db.Model):
   name = db.StringProperty()

@@ -1,4 +1,5 @@
 package pomodo.models {
+  import org.ruboss.collections.ModelsCollection;
   import org.ruboss.models.RubossModel;
   
   [Resource(name="posts")]
@@ -10,6 +11,9 @@ package pomodo.models {
 
     public var content:String;
 
+    [HasMany]
+    public var comments:ModelsCollection;
+    
     public function Post() {
       super(LABEL);
     }

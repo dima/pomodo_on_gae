@@ -25,14 +25,14 @@
     private function createPost():void {
       var post:Post = new Post();
       post.title = titleTextInput.text;
-      post.content = contentTextInput.text;
+      post.content = contentTextArea.text;
 
       post.create({onSuccess: onPostCreate});
     }
 
     private function updatePost():void {
       _post.title = titleTextInput.text;
-      _post.content = contentTextInput.text;
+      _post.content = contentTextArea.text;
 
       _post.update({onSuccess: onPostUpdate});
     }
@@ -81,7 +81,7 @@
         <mx:TextInput id="titleTextInput" width="100%" text="{_post.title}"/>
       </mx:FormItem>
       <mx:FormItem label="Content" width="100%">
-        <mx:TextInput id="contentTextInput" width="100%" text="{_post.content}"/>
+        <mx:TextArea id="contentTextArea" width="100%" height="200" text="{_post.content}"/>
       </mx:FormItem>
     </mx:Form>
     <mx:ControlBar width="100%">
