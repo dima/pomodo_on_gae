@@ -6,7 +6,7 @@ import wsgiref.handlers
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
-from app.controllers import posts
+from app.controllers import posts, comments
 
 class AppController(webapp.RequestHandler):
   def get(self):
@@ -14,7 +14,7 @@ class AppController(webapp.RequestHandler):
 
 def main():
   application = webapp.WSGIApplication(
-  [('/*$', AppController), ('/posts.*', posts.Controller)],
+  [('/*$', AppController), ('/posts.*', posts.Controller), ('/comments.*', comments.Controller)],
     debug=True)
   wsgiref.handlers.CGIHandler().run(application)
 

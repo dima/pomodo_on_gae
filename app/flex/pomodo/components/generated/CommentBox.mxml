@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" label="Comment"
+  xmlns:rcomponents="org.ruboss.components.*">
+  <mx:Script><![CDATA[
+    import org.ruboss.Ruboss;
+    import org.ruboss.utils.RubossUtils;
+    import pomodo.models.Comment;
+    import pomodo.models.Post;
+
+    [Bindable]
+    private var _comment:Comment = new Comment();
+
+    private function newComment():void {
+      _comment = new Comment();
+      commentsList.selectedIndex = -1;
+    }
+
+    private function saveComment():void {
+      if (_comment.id) {
+        updateComment();
+      } else {
+        createComment();
+      }
+    }
+  
+    private function createComment():void {
+      var comment:Comment = new Comment();
+      comment.name = nameTextInput.text;
+      comment.body = bodyTextArea.text;
+      comment.sent = sentDateTimeTextInput.date;
+      comment.publish = publishCheckBox.selected;
+
+      comment.post = Post(postComboBox.selectedItem);
+      comment.create({onSuccess: onCommentCreate});
+    }
+
+    private function updateComment():void {
+      _comment.name = nameTextInput.text;
+      _comment.body = bodyTextArea.text;
+      _comment.sent = sentDateTimeTextInput.date;
+      _comment.publish = publishCheckBox.selected;
+
+      _comment.post = Post(postComboBox.selectedItem);
+      _comment.update({onSuccess: onCommentUpdate});
+    }
+
+    private function destroyComment():void {
+      _comment.destroy({onSuccess: onCommentDestroy});
+    }
+  
+    private function onCommentSelect():void {
+      _comment = RubossUtils.clone(commentsList.selectedItem) as Comment;
+    }
+  
+    private function onCommentCreate(comment:Comment):void {
+      _comment = new Comment;
+    }
+  
+    private function onCommentUpdate(comment:Comment):void {
+      commentsList.selectedItem = comment;
+      _comment = RubossUtils.clone(comment) as Comment;
+    }
+  
+    private function onCommentDestroy(comment:Comment):void {
+      onCommentCreate(comment);
+    }
+
+    private function canDeleteComment(comment:Comment):Boolean {
+      return comment != null && !RubossUtils.isEmpty(comment.id);
+    }
+  ]]></mx:Script>
+  <mx:Panel id="commentsPanel"
+    title="Comments" cornerRadius="0" dropShadowEnabled="false" borderStyle="solid" 
+    borderThickness="1" backgroundColor="#EEEEEE" width="25%" height="100%">
+    <mx:List id="commentsList"
+      width="100%" height="100%"
+      dataProvider="{Ruboss.models.index(Comment)}"
+      change="onCommentSelect()"/>
+    <mx:ControlBar width="100%">
+      <mx:Button label="New Comment" width="100%" height="30"
+        click="newComment()"/>
+    </mx:ControlBar>
+  </mx:Panel>
+  <mx:Panel title="Edit Comment" cornerRadius="0" dropShadowEnabled="false" borderStyle="solid" 
+    borderThickness="1" backgroundColor="#EEEEEE" width="75%" height="100%">
+    <mx:Form width="100%" height="100%">
+      <mx:FormItem label="Name" width="100%">
+        <mx:TextInput id="nameTextInput" width="100%" text="{_comment.name}"/>
+      </mx:FormItem>
+      <mx:FormItem label="Body" width="100%">
+        <mx:TextArea id="bodyTextArea" width="100%" height="200" text="{_comment.body}"/>
+      </mx:FormItem>
+      <mx:FormItem label="Sent" width="100%">
+        <rcomponents:DateTimeTextInput id="sentDateTimeTextInput" width="200" date="{_comment.sent}"/>
+      </mx:FormItem>
+      <mx:FormItem label="Publish" width="100%">
+        <mx:CheckBox id="publishCheckBox" selected="{_comment.publish}"/>
+      </mx:FormItem>
+      <mx:FormItem label="Post" width="100%">
+        <mx:ComboBox id="postComboBox" width="200"
+          labelField="{Post.LABEL}"
+          dataProvider="{Ruboss.models.index(Post)}" prompt="Post ..."
+          selectedItem="{_comment.post}" />
+      </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar width="100%">
+      <mx:Button label="Save Comment" width="50%" height="30"
+        click="saveComment()"/>
+      <mx:Button label="Delete Comment" width="50%" height="30"
+        enabled="{canDeleteComment(_comment)}"
+        click="destroyComment()"/>
+    </mx:ControlBar>
+  </mx:Panel>
+</mx:HBox>

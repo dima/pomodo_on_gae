@@ -22,38 +22,30 @@
 
 __author__ = 'Dima Berastau'
 
+import logging
+import restful
+
+from google.appengine.ext import webapp
+from google.appengine.api import users
 from google.appengine.ext import db
-import datetime
+from app import models
 
-# Some useful module methods
-def all(model):
-  result = '<entities kind="%s" type="array">\n' % model.kind()
-  for item in model.all():
-    result += item.to_xml()
-  
-  result += '</entities>'
-  return result
+class Controller(restful.Controller):
+  def get(self):
+    restful.send_successful_response(self, models.all(models.Comment))
+    
+  @restful.methods_via_query_allowed
+  def post(self, *params):
+    comment = models.Comment()
+    models.update_model_from_params(comment, self.request.params)
+    restful.send_successful_response(self, comment.to_xml())
+    
+  def put(self, *params):
+    comment = models.Comment.get(db.Key(restful.get_model_key(self)))
+    models.update_model_from_params(comment, self.request.params)
+    restful.send_successful_response(self, comment.to_xml())
 
-def update_model_from_params(model, params):
-  for k, v in params.items():
-    if k.endswith("_id"):
-      setattr(model, k.replace("_id", ""), db.Key(v))
-    elif isinstance(getattr(model, k), bool):
-      setattr(model, k, bool(v))
-    elif isinstance(getattr(model, k), datetime.datetime):
-      setattr(model, k, datetime.datetime.now())
-    else:
-      setattr(model, k, v)
-
-  model.put()
-
-class Post(db.Model):
-  title = db.StringProperty()
-  content = db.StringProperty()
-  
-class Comment(db.Model):
-  name = db.StringProperty()
-  body = db.StringProperty(multiline=True)
-  sent = db.DateTimeProperty(auto_now=True)
-  publish = db.BooleanProperty(default=False)
-  post = db.ReferenceProperty(Post)
+  def delete(self):
+    comment = models.Comment.get(db.Key(restful.get_model_key(self)))
+    db.delete(comment)
+    restful.send_successful_response(self, comment.to_xml())
