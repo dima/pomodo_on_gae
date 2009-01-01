@@ -1,3 +1,27 @@
+# The MIT License
+# 
+# Copyright (c) 2008 Dima Berastau
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to 
+# deal in the Software without restriction, including without limitation 
+# the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+# and/or sell copies of the Software, and to permit persons to whom the 
+# Software is furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+# DEALINGS IN THE SOFTWARE.
+
+__author__ = 'Dima Berastau'
+
 import logging
 import restful
 
@@ -6,16 +30,9 @@ from google.appengine.api import users
 from google.appengine.ext import db
 from app import models
 
-# 1. extract XML marshalling for arrays + content-type to it's own method
-
 class Controller(restful.Controller):
   def get(self):
-    self.response.headers["Content-Type"] = "application/xml"
-    self.response.out.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-    self.response.out.write('<entities kind="Post" type="array">\n')
-    for post in models.Post.all():
-      self.response.out.write(post.to_xml())
-    self.response.out.write('</entities>')
+    restful.send_successful_response(self, models.all(models.Post))
     
   @restful.methods_via_query_allowed
   def post(self, *params):
