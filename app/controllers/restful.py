@@ -42,7 +42,6 @@ import logging
  
 # Some useful module methods
 def send_successful_response(handler, response):
-    # Response is probably just a URL.
     logging.debug("Sending successful response: %s", response)
     handler.response.headers["Content-Type"] = "application/xml"
     handler.response.out.write('<?xml version="1.0" encoding="UTF-8"?>')
