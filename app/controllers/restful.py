@@ -44,7 +44,12 @@ import logging
 def send_successful_response(handler, response):
     # Response is probably just a URL.
     logging.debug("Sending successful response: %s", response)
+    handler.response.headers["Content-Type"] = "application/xml"
+    handler.response.out.write('<?xml version="1.0" encoding="UTF-8"?>')
     handler.response.out.write(response)
+    
+def get_model_key(handler):
+  return handler.request.path_info.split("/").pop().replace(".fxml", "")
  
 def get_sent_properties(request_func, propname_list):
     """
