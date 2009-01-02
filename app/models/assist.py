@@ -22,30 +22,37 @@
 
 __author__ = 'Dima Berastau'
 
-import logging
-import restful
-
-from google.appengine.ext import webapp
-from google.appengine.api import users
 from google.appengine.ext import db
-from app import models
+import datetime
 
-class Controller(restful.Controller):
-  def get(self):
-    restful.send_successful_response(self, models.all(models.Post))
-    
-  @restful.methods_via_query_allowed
-  def post(self, *params):
-    post = models.Post()
-    models.update_model_from_params(post, self.request.params)
-    restful.send_successful_response(self, post.to_xml())
-    
-  def put(self, *params):
-    post = models.Post.get(db.Key(restful.get_model_key(self)))
-    models.update_model_from_params(post, self.request.params)
-    restful.send_successful_response(self, post.to_xml())
+# Some useful module methods
+def all(model):
+  items = "".join(str(item.to_xml()) for item in model.all())
+  if items == "":
+    return '<entities type="array"/>'
+  else:
+    return '<entities kind="%s" type="array">%s</entities>' % (model.kind(), items)
 
-  def delete(self):
-    post = models.Post.get(db.Key(restful.get_model_key(self)))
-    db.delete(post)
-    restful.send_successful_response(self, post.to_xml())
+def update_model_from_params(model, params):
+  for k, v in params.items():
+    if k.endswith("_id"):
+      if v == "":
+        setattr(model, k.replace("_id", ""), None)
+      else:
+        setattr(model, k.replace("_id", ""), db.Key(v))
+    elif hasattr(model, k):
+      if isinstance(getattr(model, k), bool):
+        if v == "false" or v == "":
+          setattr(model, k, False)
+        else:
+          setattr(model, k, True)
+      elif isinstance(getattr(model, k), datetime.datetime):
+        if v == "":
+          setattr(model, k, datetime.datetime.now())
+        else:
+          date = datetime.strptime(v, "%Y-%m-%dT%H:%M:%S")
+          setattr(model, k, date)
+      else:
+        setattr(model, k, v)
+
+  model.put()
