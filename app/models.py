@@ -27,12 +27,8 @@ import datetime
 
 # Some useful module methods
 def all(model):
-  result = '<entities kind="%s" type="array">\n' % model.kind()
-  for item in model.all():
-    result += item.to_xml()
-  
-  result += '</entities>'
-  return result
+  items = "\n".join(str(item.to_xml()) for item in model.all())
+  return '<entities kind="%s" type="array">%s</entities>' % (model.kind(), items)
 
 def update_model_from_params(model, params):
   for k, v in params.items():
@@ -40,12 +36,16 @@ def update_model_from_params(model, params):
       setattr(model, k.replace("_id", ""), db.Key(v))
     elif hasattr(model, k):
       if isinstance(getattr(model, k), bool):
-        if v == "false":
+        if v == "false" or v == "":
           setattr(model, k, False)
         else:
           setattr(model, k, True)
       elif isinstance(getattr(model, k), datetime.datetime):
-        setattr(model, k, datetime.datetime.now())
+        if v == "":
+          setattr(model, k, datetime.datetime.now())
+        else:
+          date = datetime.strptime(v, "%Y-%m-%dT%H:%M:%S")
+          setattr(model, k, date)
       else:
         setattr(model, k, v)
 
