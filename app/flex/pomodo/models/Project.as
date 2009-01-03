@@ -7,15 +7,15 @@ package pomodo.models {
   public class Project extends RubossModel {
     public static const LABEL:String = "name";
 
-    public var name:String;
+    public var name:String = "";
 
-    public var notes:String;
+    public var notes:String = "";
 
-    public var startDate:Date;
+    public var startDate:Date = new Date;
 
-    public var endDate:Date;
+    public var endDate:Date = new Date;
 
-    public var completed:Boolean;
+    public var completed:Boolean = false;
 
     [BelongsTo]
     public var user:User;

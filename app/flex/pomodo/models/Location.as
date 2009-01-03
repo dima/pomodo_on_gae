@@ -7,9 +7,9 @@ package pomodo.models {
   public class Location extends RubossModel {
     public static const LABEL:String = "name";
 
-    public var name:String;
+    public var name:String = "";
 
-    public var notes:String;
+    public var notes:String = "";
 
     [BelongsTo]
     public var user:User;

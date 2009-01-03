@@ -7,13 +7,13 @@ package pomodo.models {
   public class User extends RubossModel {
     public static const LABEL:String = "login";
 
-    public var login:String;
+    public var login:String = "";
 
-    public var firstName:String;
+    public var firstName:String = "";
 
-    public var lastName:String;
+    public var lastName:String = "";
 
-    public var email:String;
+    public var email:String = "";
 
     [HasOne]
     public var note:Note;

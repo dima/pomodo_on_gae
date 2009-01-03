@@ -6,19 +6,19 @@ package pomodo.models {
   public class Task extends RubossModel {
     public static const LABEL:String = "name";
 
-    public var name:String;
+    public var name:String = "";
 
-    public var notes:String;
-
-    [DateTime]
-    public var startTime:Date;
+    public var notes:String = "";
 
     [DateTime]
-    public var endTime:Date;
+    public var startTime:Date = new Date;
 
-    public var completed:Boolean;
+    [DateTime]
+    public var endTime:Date = new Date;
 
-    public var nextAction:Boolean;
+    public var completed:Boolean = false;
+
+    public var nextAction:Boolean = false;
 
     [BelongsTo]
     public var project:Project;
