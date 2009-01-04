@@ -30,7 +30,11 @@ import datetime
 # Some useful module methods
 def get_current_account():
   q = db.GqlQuery("select * from Account where user = :1", users.get_current_user())
-  return q.fetch(1)[0]
+  result = q.fetch(1)
+  if (len(result)):
+    return result[0]
+  else:
+    return None
 
 def all(model):
   if model.kind() == "Account":
