@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+  xmlns:login="pomodo.components.login.*"
   xmlns:generated="pomodo.components.generated.*"
-  paddingBottom="8" paddingLeft="8" paddingRight="8" paddingTop="8"
-  layout="horizontal" styleName="plain" initialize="init()">
+  paddingBottom="4" paddingLeft="8" paddingRight="8" paddingTop="8"
+  styleName="plain" initialize="init()" minHeight="600" minWidth="800" xmlns:main="pomodo.components.main.*">
   <mx:Script>
     <![CDATA[
       import org.ruboss.services.http.GAEHTTPServiceProvider;
       import pomodo.controllers.ApplicationController;
+      import pomodo.components.login.LoginScreen;
+      import pomodo.components.main.App;
+      import mx.containers.Canvas;
+      import org.ruboss.Ruboss;
+      import org.ruboss.utils.RubossUtils;
 
       private function init():void {
+        Ruboss.enableLogging();
         ApplicationController.initialize([GAEHTTPServiceProvider], GAEHTTPServiceProvider.ID);
+      }
+
+      private function onLogin(event:Event):void {
+        var app:App = new App;
+        app.addEventListener("logout", onLogout);
+        showScreen(app);
+      }
+      
+      private function onLogout(event:Event):void {
+        RubossUtils.navToURL("/");
+      }
+      
+      private function showScreen(screen:Canvas):void {
+        container.removeAllChildren();
+        container.addChild(screen);
       }
     ]]>
   </mx:Script>
-  <mx:LinkBar dataProvider="{mainViewStack}" direction="vertical" borderStyle="solid" backgroundColor="#EEEEEE"/>
-  <mx:ViewStack id="mainViewStack" width="100%" height="100%">
-    <!-- For a simple demo, put all the components here. -->
-    <generated:LocationBox/>
-    <generated:NoteBox/>
-    <generated:ProjectBox/>
-    <generated:TaskBox/>
-    <generated:UserBox/>
-  </mx:ViewStack>
+  <mx:Style source="styles.css"/>
+  <mx:Canvas id="container" styleName="appContainer" x="0" y="0" width="100%" height="100%">
+    <!--<login:LoginScreen login="onLogin(event)" verticalCenter="0" horizontalCenter="0"/>-->
+    <main:App verticalCenter="0" horizontalCenter="0"/>
+  </mx:Canvas>
 </mx:Application>
-

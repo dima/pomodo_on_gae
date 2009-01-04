@@ -1,8 +1,8 @@
 from google.appengine.ext import db
-import user
+import account
 
 class Note(db.Model):
   content = db.TextProperty()
-  user = db.ReferenceProperty(user.User)
+  account = db.ReferenceProperty(account.Account)
   
   

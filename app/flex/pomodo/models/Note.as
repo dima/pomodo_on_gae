@@ -9,7 +9,7 @@ package pomodo.models {
     public var content:String = "";
 
     [BelongsTo]
-    public var user:User;
+    public var account:Account;
 
     public function Note() {
       super(LABEL);

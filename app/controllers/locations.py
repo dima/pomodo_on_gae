@@ -4,9 +4,11 @@ import logging
 from google.appengine.ext import webapp
 from google.appengine.api import users
 from google.appengine.ext import db
+from app import authorized
 from app.models import assist, location
 
 class Controller(restful.Controller):
+  @authorized.role("user")
   def get(self):
     restful.send_successful_response(self, assist.all(location.Location))
     

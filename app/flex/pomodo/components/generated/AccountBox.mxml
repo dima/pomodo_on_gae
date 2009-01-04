@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" label="Account"
+  xmlns:rcomponents="org.ruboss.components.*">
+  <mx:Script><![CDATA[
+    import org.ruboss.Ruboss;
+    import org.ruboss.utils.RubossUtils;
+    import pomodo.models.Account;
+
+    [Bindable]
+    private var _account:Account = new Account();
+
+    private function newAccount():void {
+      _account = new Account();
+      accountsList.selectedIndex = -1;
+    }
+
+    private function saveAccount():void {
+      if (_account.id) {
+        updateAccount();
+      } else {
+        createAccount();
+      }
+    }
+  
+    private function createAccount():void {
+      var account:Account = new Account();
+      account.login = loginTextInput.text;
+      account.firstName = firstNameTextInput.text;
+      account.lastName = lastNameTextInput.text;
+      account.email = emailTextInput.text;
+
+      account.create({onSuccess: onAccountCreate});
+    }
+
+    private function updateAccount():void {
+      _account.login = loginTextInput.text;
+      _account.firstName = firstNameTextInput.text;
+      _account.lastName = lastNameTextInput.text;
+      _account.email = emailTextInput.text;
+
+      _account.update({onSuccess: onAccountUpdate});
+    }
+
+    private function destroyAccount():void {
+      _account.destroy({onSuccess: onAccountDestroy});
+    }
+  
+    private function onAccountSelect():void {
+      _account = RubossUtils.clone(accountsList.selectedItem) as Account;
+    }
+  
+    private function onAccountCreate(account:Account):void {
+      _account = new Account;
+    }
+  
+    private function onAccountUpdate(account:Account):void {
+      accountsList.selectedItem = account;
+      _account = RubossUtils.clone(account) as Account;
+    }
+  
+    private function onAccountDestroy(account:Account):void {
+      onAccountCreate(account);
+    }
+
+    private function canDeleteAccount(account:Account):Boolean {
+      return account != null && !RubossUtils.isEmpty(account.id);
+    }
+  ]]></mx:Script>
+  <mx:Panel id="accountsPanel"
+    title="Accounts" cornerRadius="0" dropShadowEnabled="false" borderStyle="solid" 
+    borderThickness="1" backgroundColor="#EEEEEE" width="25%" height="100%">
+    <mx:List id="accountsList"
+      width="100%" height="100%"
+      dataProvider="{Ruboss.models.index(Account)}"
+      change="onAccountSelect()"/>
+    <mx:ControlBar width="100%">
+      <mx:Button label="New Account" width="100%" height="30"
+        click="newAccount()"/>
+    </mx:ControlBar>
+  </mx:Panel>
+  <mx:Panel title="Edit Account" cornerRadius="0" dropShadowEnabled="false" borderStyle="solid" 
+    borderThickness="1" backgroundColor="#EEEEEE" width="75%" height="100%">
+    <mx:Form width="100%" height="100%">
+      <mx:FormItem label="Login" width="100%">
+        <mx:TextInput id="loginTextInput" width="100%" text="{_account.login}"/>
+      </mx:FormItem>
+      <mx:FormItem label="FirstName" width="100%">
+        <mx:TextInput id="firstNameTextInput" width="100%" text="{_account.firstName}"/>
+      </mx:FormItem>
+      <mx:FormItem label="LastName" width="100%">
+        <mx:TextInput id="lastNameTextInput" width="100%" text="{_account.lastName}"/>
+      </mx:FormItem>
+      <mx:FormItem label="Email" width="100%">
+        <mx:TextInput id="emailTextInput" width="100%" text="{_account.email}"/>
+      </mx:FormItem>
+    </mx:Form>
+    <mx:ControlBar width="100%">
+      <mx:Button label="Save Account" width="50%" height="30"
+        click="saveAccount()"/>
+      <mx:Button label="Delete Account" width="50%" height="30"
+        enabled="{canDeleteAccount(_account)}"
+        click="destroyAccount()"/>
+    </mx:ControlBar>
+  </mx:Panel>
+</mx:HBox>

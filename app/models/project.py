@@ -1,5 +1,5 @@
 from google.appengine.ext import db
-import user
+import account
 
 class Project(db.Model):
   name = db.StringProperty()
@@ -7,6 +7,6 @@ class Project(db.Model):
   start_date = db.DateProperty(auto_now_add = True)
   end_date = db.DateProperty(auto_now_add = True)
   completed = db.BooleanProperty(default = False)
-  user = db.ReferenceProperty(user.User)
+  account = db.ReferenceProperty(account.Account)
   
   

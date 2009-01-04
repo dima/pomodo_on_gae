@@ -7,7 +7,7 @@
     import pomodo.models.Task;
     import pomodo.models.Project;
     import pomodo.models.Location;
-    import pomodo.models.User;
+    import pomodo.models.Account;
 
     [Bindable]
     private var _task:Task = new Task();
@@ -36,7 +36,7 @@
 
       task.project = Project(projectComboBox.selectedItem);
       task.location = Location(locationComboBox.selectedItem);
-      task.user = User(userComboBox.selectedItem);
+      task.account = Account(accountComboBox.selectedItem);
       task.create({onSuccess: onTaskCreate});
     }
 
@@ -50,7 +50,7 @@
 
       _task.project = Project(projectComboBox.selectedItem);
       _task.location = Location(locationComboBox.selectedItem);
-      _task.user = User(userComboBox.selectedItem);
+      _task.account = Account(accountComboBox.selectedItem);
       _task.update({onSuccess: onTaskUpdate});
     }
 
@@ -124,11 +124,11 @@
           dataProvider="{Ruboss.models.index(Location)}" prompt="Location ..."
           selectedItem="{_task.location}" />
       </mx:FormItem>
-      <mx:FormItem label="User" width="100%">
-        <mx:ComboBox id="userComboBox" width="200"
-          labelField="{User.LABEL}"
-          dataProvider="{Ruboss.models.index(User)}" prompt="User ..."
-          selectedItem="{_task.user}" />
+      <mx:FormItem label="Account" width="100%">
+        <mx:ComboBox id="accountComboBox" width="200"
+          labelField="{Account.LABEL}"
+          dataProvider="{Ruboss.models.index(Account)}" prompt="Account ..."
+          selectedItem="{_task.account}" />
       </mx:FormItem>
     </mx:Form>
     <mx:ControlBar width="100%">

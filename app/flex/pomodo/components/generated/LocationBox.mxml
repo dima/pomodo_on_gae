@@ -5,7 +5,7 @@
     import org.ruboss.Ruboss;
     import org.ruboss.utils.RubossUtils;
     import pomodo.models.Location;
-    import pomodo.models.User;
+    import pomodo.models.Account;
 
     [Bindable]
     private var _location:Location = new Location();
@@ -28,7 +28,7 @@
       location.name = nameTextInput.text;
       location.notes = notesTextArea.text;
 
-      location.user = User(userComboBox.selectedItem);
+      location.account = Account(accountComboBox.selectedItem);
       location.create({onSuccess: onLocationCreate});
     }
 
@@ -36,7 +36,7 @@
       _location.name = nameTextInput.text;
       _location.notes = notesTextArea.text;
 
-      _location.user = User(userComboBox.selectedItem);
+      _location.account = Account(accountComboBox.selectedItem);
       _location.update({onSuccess: onLocationUpdate});
     }
 
@@ -86,11 +86,11 @@
       <mx:FormItem label="Notes" width="100%">
         <mx:TextArea id="notesTextArea" width="100%" height="200" text="{_location.notes}"/>
       </mx:FormItem>
-      <mx:FormItem label="User" width="100%">
-        <mx:ComboBox id="userComboBox" width="200"
-          labelField="{User.LABEL}"
-          dataProvider="{Ruboss.models.index(User)}" prompt="User ..."
-          selectedItem="{_location.user}" />
+      <mx:FormItem label="Account" width="100%">
+        <mx:ComboBox id="accountComboBox" width="200"
+          labelField="{Account.LABEL}"
+          dataProvider="{Ruboss.models.index(Account)}" prompt="Account ..."
+          selectedItem="{_location.account}" />
       </mx:FormItem>
     </mx:Form>
     <mx:ControlBar width="100%">

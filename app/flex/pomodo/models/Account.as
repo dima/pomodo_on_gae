@@ -2,9 +2,9 @@ package pomodo.models {
   import org.ruboss.collections.ModelsCollection;
   import org.ruboss.models.RubossModel;
   
-  [Resource(name="users")]
+  [Resource(name="accounts")]
   [Bindable]
-  public class User extends RubossModel {
+  public class Account extends RubossModel {
     public static const LABEL:String = "login";
 
     public var login:String = "";
@@ -27,7 +27,7 @@ package pomodo.models {
     [HasMany]
     public var locations:ModelsCollection;
     
-    public function User() {
+    public function Account() {
       super(LABEL);
     }
   }
