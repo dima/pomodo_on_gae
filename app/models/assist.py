@@ -23,11 +23,22 @@
 __author__ = 'Dima Berastau'
 
 from google.appengine.ext import db
+from google.appengine.api import users
+from app.models import account
 import datetime
 
 # Some useful module methods
+def get_current_account():
+  q = db.GqlQuery("select * from Account where user = :1", users.get_current_user())
+  return q.fetch(1)[0]
+
 def all(model):
-  items = "".join(str(item.to_xml()) for item in model.all())
+  if model.kind() == "Account":
+    filters = { "key" : "user", "value" : users.get_current_user() }
+  else:
+    filters = { "key" : "account", "value" : get_current_account() }
+
+  items = "".join(str(item.to_xml()) for item in model.all().filter(filters["key"], filters["value"]))
   if items == "":
     return '<entities type="array"/>'
   else:

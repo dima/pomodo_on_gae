@@ -5,5 +5,6 @@ class Account(db.Model):
   first_name = db.StringProperty()
   last_name = db.StringProperty()
   email = db.StringProperty()
+  user = db.UserProperty()
   
   

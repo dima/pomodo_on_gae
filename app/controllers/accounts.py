@@ -15,6 +15,7 @@ class Controller(restful.Controller):
   @restful.methods_via_query_allowed
   def post(self):
     model = account.Account()
+    model.user = users.get_current_user()
     assist.update_model_from_params(model, self.request.params)
     restful.send_successful_response(self, model.to_xml())
     
