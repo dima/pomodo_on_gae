@@ -1,5 +1,5 @@
 from google.appengine.ext import db
-import project, location, account
+import project, location
 
 class Task(db.Model):
   name = db.StringProperty()
@@ -10,6 +10,6 @@ class Task(db.Model):
   next_action = db.BooleanProperty(default = False)
   project = db.ReferenceProperty(project.Project)
   location = db.ReferenceProperty(location.Location)
-  account = db.ReferenceProperty(account.Account)
+  user = db.UserProperty()
   
   

@@ -26,9 +26,6 @@ package pomodo.models {
     [BelongsTo]
     public var location:Location;
 
-    [BelongsTo]
-    public var account:Account;
-
     public function Task() {
       super(LABEL);
     }

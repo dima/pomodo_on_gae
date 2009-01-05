@@ -28,27 +28,15 @@ from app.models import account
 import datetime
 
 # Some useful module methods
-def get_current_account():
-  q = db.GqlQuery("select * from Account where user = :1", users.get_current_user())
-  result = q.fetch(1)
-  if (len(result)):
-    return result[0]
-  else:
-    return None
-
 def all(model):
-  if model.kind() == "Account":
-    filters = { "key" : "user", "value" : users.get_current_user() }
-  else:
-    filters = { "key" : "account", "value" : get_current_account() }
-
-  items = "".join(str(item.to_xml()) for item in model.all().filter(filters["key"], filters["value"]))
+  items = "".join(str(item.to_xml()) for item in model.all().filter("user", users.get_current_user()))
   if items == "":
     return '<entities type="array"/>'
   else:
     return '<entities kind="%s" type="array">%s</entities>' % (model.kind(), items)
 
 def update_model_from_params(model, params):
+  model.user = users.get_current_user()
   for k, v in params.items():
     if k.endswith("_id"):
       if v == "":

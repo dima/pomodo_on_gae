@@ -4,13 +4,11 @@ project:
  - start_date: date
  - end_date: date
  - completed: boolean
- - belongs_to: [account]
  - has_many: [tasks]
 
 location:
  - name: string
  - notes: text
- - belongs_to: [account]
  - has_many: [tasks]
 
 task:
@@ -20,16 +18,7 @@ task:
  - end_time: datetime
  - completed: boolean
  - next_action: boolean
- - belongs_to: [project, location, account]
+ - belongs_to: [project, location]
 
 note:
  - content: text
- - belongs_to: [account]
-
-account:
- - login: string
- - first_name: string
- - last_name: string
- - email: string
- - has_many: [tasks, projects, locations]
- - has_one: [note]

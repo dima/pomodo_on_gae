@@ -17,9 +17,6 @@ package pomodo.models {
 
     public var completed:Boolean = false;
 
-    [BelongsTo]
-    public var account:Account;
-
     [HasMany]
     public var tasks:ModelsCollection;
     

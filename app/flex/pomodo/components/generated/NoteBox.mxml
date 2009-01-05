@@ -5,7 +5,6 @@
     import org.ruboss.Ruboss;
     import org.ruboss.utils.RubossUtils;
     import pomodo.models.Note;
-    import pomodo.models.Account;
 
     [Bindable]
     private var _note:Note = new Note();
@@ -27,14 +26,12 @@
       var note:Note = new Note();
       note.content = contentTextArea.text;
 
-      note.account = Account(accountComboBox.selectedItem);
       note.create({onSuccess: onNoteCreate});
     }
 
     private function updateNote():void {
       _note.content = contentTextArea.text;
 
-      _note.account = Account(accountComboBox.selectedItem);
       _note.update({onSuccess: onNoteUpdate});
     }
 
@@ -80,12 +77,6 @@
     <mx:Form width="100%" height="100%">
       <mx:FormItem label="Content" width="100%">
         <mx:TextArea id="contentTextArea" width="100%" height="200" text="{_note.content}"/>
-      </mx:FormItem>
-      <mx:FormItem label="Account" width="100%">
-        <mx:ComboBox id="accountComboBox" width="200"
-          labelField="{Account.LABEL}"
-          dataProvider="{Ruboss.models.index(Account)}" prompt="Account ..."
-          selectedItem="{_note.account}" />
       </mx:FormItem>
     </mx:Form>
     <mx:ControlBar width="100%">

@@ -5,7 +5,6 @@
     import org.ruboss.Ruboss;
     import org.ruboss.utils.RubossUtils;
     import pomodo.models.Project;
-    import pomodo.models.Account;
 
     [Bindable]
     private var _project:Project = new Project();
@@ -31,7 +30,6 @@
       project.endDate = endDateDateField.selectedDate;
       project.completed = completedCheckBox.selected;
 
-      project.account = Account(accountComboBox.selectedItem);
       project.create({onSuccess: onProjectCreate});
     }
 
@@ -42,7 +40,6 @@
       _project.endDate = endDateDateField.selectedDate;
       _project.completed = completedCheckBox.selected;
 
-      _project.account = Account(accountComboBox.selectedItem);
       _project.update({onSuccess: onProjectUpdate});
     }
 
@@ -100,12 +97,6 @@
       </mx:FormItem>
       <mx:FormItem label="Completed" width="100%">
         <mx:CheckBox id="completedCheckBox" selected="{_project.completed}"/>
-      </mx:FormItem>
-      <mx:FormItem label="Account" width="100%">
-        <mx:ComboBox id="accountComboBox" width="200"
-          labelField="{Account.LABEL}"
-          dataProvider="{Ruboss.models.index(Account)}" prompt="Account ..."
-          selectedItem="{_project.account}" />
       </mx:FormItem>
     </mx:Form>
     <mx:ControlBar width="100%">

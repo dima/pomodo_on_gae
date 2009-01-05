@@ -11,9 +11,6 @@ package pomodo.models {
 
     public var notes:String = "";
 
-    [BelongsTo]
-    public var account:Account;
-
     [HasMany]
     public var tasks:ModelsCollection;
     

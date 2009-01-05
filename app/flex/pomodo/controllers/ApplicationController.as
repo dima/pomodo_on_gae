@@ -10,7 +10,7 @@ package pomodo.controllers {
   public class ApplicationController extends RubossApplicationController {
     private static var controller:ApplicationController;
     
-    public static var models:Array = [Account, Location, Note, Project, Task]; /* Models */
+    public static var models:Array = [Location, Note, Project, Task]; /* Models */
     
     public static var commands:Array = []; /* Commands */
     
