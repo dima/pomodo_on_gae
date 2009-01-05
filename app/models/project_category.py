@@ -1,8 +1,7 @@
 from google.appengine.ext import db
 
-class Location(db.Model):
+class ProjectCategory(db.Model):
   name = db.StringProperty()
-  notes = db.TextProperty()
   user = db.UserProperty()
   
   

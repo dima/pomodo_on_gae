@@ -1,33 +1,98 @@
 package pomodo.models {
+  import org.ruboss.collections.ModelsCollection;
   import org.ruboss.models.RubossModel;
   
   [Resource(name="tasks")]
   [Bindable]
   public class Task extends RubossModel {
     public static const LABEL:String = "name";
+        
+    public var name:String;
 
-    public var name:String = "";
+    public var notes:String;
 
-    public var notes:String = "";
+    public var completed:Boolean;
 
-    [DateTime]
-    public var startTime:Date = new Date;
-
-    [DateTime]
-    public var endTime:Date = new Date;
-
-    public var completed:Boolean = false;
-
-    public var nextAction:Boolean = false;
-
+    public var billedPercentage:int;
+    
+    [Ignored]
+    public var totalTime:Number = 0;
+    
+    [Ignored]
+    public var totalTimeToday:Number = 0;
+    
+    [Ignored]
+    public var totalTimeThisWeek:Number = 0;
+    
+    [Ignored]
+    public var totalTimeThisMonth:Number = 0;
+    
+    [Lazy]
     [BelongsTo]
-    public var project:Project;
+    public var sprint:Sprint;
 
-    [BelongsTo]
-    public var location:Location;
-
+    [HasMany]
+    public var workunits:ModelsCollection;
+    
     public function Task() {
       super(LABEL);
+    }
+    
+    [Ignored]
+    public function get basicTotalTime():Number {
+      var total:Number = new Number(0);
+      for each (var unit:Workunit in workunits) {
+        total += unit.workedMilliseconds;
+      }
+      return total;
+    }
+    
+    [Ignored]
+    public function get computedTotalTime():Number {
+      return computeTotalTime(totalTime);
+    }
+    
+    [Ignored]
+    public function get computedTotalCost():Number {
+      return computeTotalCost(computedTotalTime);
+    }
+    
+    [Ignored]
+    public function get computedTotalTimeToday():Number {
+      return computeTotalTime(totalTimeToday);
+    }
+    
+    [Ignored]
+    public function get computedTotalCostToday():Number {
+      return computeTotalCost(computedTotalTimeToday);
+    }
+    
+    [Ignored]
+    public function get computedTotalTimeThisWeek():Number {
+      return computeTotalTime(totalTimeThisWeek);
+    }
+    
+    [Ignored]
+    public function get computedTotalCostThisWeek():Number {
+      return computeTotalCost(computedTotalTimeThisWeek);
+    }
+    
+    [Ignored]
+    public function get computedTotalTimeThisMonth():Number {
+      return computeTotalTime(totalTimeThisMonth);
+    }
+    
+    [Ignored]
+    public function get computedTotalCostThisMonth():Number {
+      return computeTotalCost(computedTotalTimeThisMonth);
+    }
+    
+    private function computeTotalTime(addTo:Number):Number {
+      return basicTotalTime + addTo;
+    }
+    
+    private function computeTotalCost(value:Number):Number {
+      return (value * sprint.billedHourlyRate) / 3600000;
     }
   }
 }

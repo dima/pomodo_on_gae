@@ -17,6 +17,30 @@ Application {
   fontSize: 12;
 }
 
+ApplicationControlBar {
+  borderColor: #999999;
+  borderStyle: solid;
+  borderThickness: 1;
+  dropShadowEnabled: false;
+  fontFamily: MyriadWebPro;
+  fontSize: 12;
+  cornerRadius: 0;
+  paddingLeft: 0;
+  paddingRight: 0;
+  paddingTop: 0;
+  paddingBottom: 0;
+  horizontalGap: 5;
+}
+
+.appContainer {
+  backgroundImage: Embed("assets/background.png",
+      scaleGridLeft="25",
+      scaleGridRight="700",
+      scaleGridTop="60",
+      scaleGridBottom="200");
+  backgroundSize: "100%";
+}
+
 .infoBox {
   backgroundColor: #FFFFFF;
   borderColor: #999999;
@@ -40,9 +64,9 @@ Application {
 }
 
 .addItemButton {
-	cornerRadius: 0;
-	paddingLeft: 0;
-	paddingRight: 0;
-	paddingTop: 2;
-	themeColor: #939393;
+  cornerRadius: 0;
+  paddingLeft: 0;
+  paddingRight: 0;
+  paddingTop: 2;
+  themeColor: #939393;
 }

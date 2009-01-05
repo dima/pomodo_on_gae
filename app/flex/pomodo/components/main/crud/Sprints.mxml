@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:components="org.ruboss.components.*">
+  <mx:Script>
+    <![CDATA[
+      import mx.controls.Alert;
+      import mx.events.CloseEvent;
+      import pomodo.models.Project;
+      import pomodo.models.Sprint;
+      import org.ruboss.Ruboss;
+      import org.ruboss.utils.RubossUtils;
+      
+      [Bindable]
+      private var selectedSprint:Sprint = new Sprint;
+      
+      private function selectSprintToEdit():void {
+        selectedSprint = Sprint(RubossUtils.clone(sprintsDataGrid.selectedItem));      
+      }
+
+      private function newSprint():void {
+        selectedSprint = new Sprint;
+        selectedSprint.name = "New Sprint";
+        selectedSprint.dueBy = new Date;
+      }      
+      
+      private function saveSprint(sprint:Sprint):void {
+        if (sprint.id) {
+          sprint.update({onSuccess: onSprintUpdate});
+        } else {
+          sprint.create({onSuccess: onSprintCreate});
+        }
+      }
+      
+      private function saveSelectedSprint():void {        
+        selectedSprint.name = nameTextInput.text;
+        selectedSprint.billedHourlyRate = int(hourlyRateMoneyTextInput.dollars);
+        selectedSprint.project = Project(projectsComboBox.selectedItem);
+        selectedSprint.dueBy = dueByDateTimeField.date as Date;
+        
+        saveSprint(selectedSprint);
+      }
+
+      internal function deleteSelectedSprint():void {
+        if (!selectedSprint) {
+          selectSprintToEdit();
+        }
+        Alert.show("Delete This Sprint?", "Delete", Alert.YES|Alert.NO, this, confirmDelete, null, Alert.YES);
+      }
+      
+      private function confirmDelete(event:CloseEvent):void {
+        if (event.detail == Alert.YES) {
+          selectedSprint.destroy({onSuccess: onSprintDestroy});
+        }
+      }      
+
+      private function onSprintUpdate(sprint:Sprint):void {
+        sprintsDataGrid.selectedItem = selectedSprint = sprint;
+      }
+      
+      private function onSprintCreate(sprint:Sprint):void {
+        onSprintUpdate(sprint);
+      }
+      
+      private function onSprintDestroy(sprint:Sprint):void {
+        selectedSprint = new Sprint;
+      }
+
+      private function currencyLabel(item:Object, column:DataGridColumn):String {
+        return currencyFormatter.format(item[column.dataField]);
+      }
+    ]]>
+  </mx:Script>
+  <mx:CurrencyFormatter id="currencyFormatter" precision="2"
+      rounding="none"
+      decimalSeparatorTo="."
+      thousandsSeparatorTo=","
+      useThousandsSeparator="true"
+      useNegativeSign="true"
+      currencySymbol="$"
+      alignSymbol="left"/>
+  <mx:CurrencyValidator id="currencyValidator" 
+      source="{hourlyRateMoneyTextInput}" property="text"
+      alignSymbol="left" allowNegative="false"/>
+  <mx:DataGrid id="sprintsDataGrid"
+      horizontalScrollPolicy="auto"
+      dataProvider="{Pomodo.models.sprints}"
+      height="{this.height - 270}" right="5" top="0" left="5" click="selectSprintToEdit()">
+      <mx:columns>
+        <mx:DataGridColumn dataField="name" headerText="Name" width="{sprintsDataGrid.width - 507}"/>
+        <mx:DataGridColumn dataField="dueBy" headerText="Due By" width="200"/>
+        <mx:DataGridColumn dataField="billedHourlyRate" headerText="Hourly Rate" width="80"
+          labelFunction="currencyLabel"/>
+        <mx:DataGridColumn dataField="project" headerText="Project" width="200"/>
+        <mx:DataGridColumn editable="false" width="25" headerText="">
+          <mx:itemRenderer>
+            <mx:Component>
+              <mx:Canvas width="25" height="25" dataChange="onDataChange(event)" click="outerDocument.deleteSelectedSprint()"
+                useHandCursor="true" buttonMode="true" toolTip="Delete This Sprint">
+                <mx:Script>
+                  <![CDATA[
+                    import pomodo.models.Sprint;
+                    
+                    private function onDataChange(event:Event):void {
+                      if (data is Sprint) deletionIcon.visible = true;
+                    }
+                  ]]>
+                </mx:Script>
+                <mx:Image id="deletionIcon" source="assets/trash.png" visible="false"
+                  width="16" height="16" x="4" y="3" />
+              </mx:Canvas>
+            </mx:Component>
+          </mx:itemRenderer>
+        </mx:DataGridColumn>
+      </mx:columns>
+  </mx:DataGrid>
+  <mx:Button label="+" bottom="247" left="10" styleName="addItemButton" click="newSprint()"/>
+  <mx:Form width="50%" bottom="40" left="5" height="200">
+    <mx:FormItem label="Name:" width="100%">
+      <mx:TextInput id="nameTextInput" width="100%" text="{selectedSprint.name}"/>
+    </mx:FormItem>
+    <mx:FormItem label="Due By:" width="100%">
+      <components:DateTimeTextInput id="dueByDateTimeField" date="{selectedSprint.dueBy}"/>
+    </mx:FormItem>
+    <mx:FormItem label="Project:">
+      <mx:ComboBox id="projectsComboBox" dataProvider="{Pomodo.models.projects}" 
+        labelField="name" selectedItem="{selectedSprint.project}"></mx:ComboBox>
+    </mx:FormItem>
+    <mx:FormItem label="Billed Hourly Rate:" width="100%">
+      <components:MoneyTextInput id="hourlyRateMoneyTextInput" width="100" dollars="{selectedSprint.billedHourlyRate}"/>
+    </mx:FormItem>
+  </mx:Form>
+  <mx:Button label="Save" bottom="10" left="10" click="saveSelectedSprint()"/>
+</mx:Canvas>

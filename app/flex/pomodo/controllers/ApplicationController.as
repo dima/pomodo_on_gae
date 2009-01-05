@@ -1,16 +1,15 @@
 package pomodo.controllers {
-  import pomodo.models.*;
-  import pomodo.commands.*;
-
-	import mx.core.Application;		
   import org.ruboss.Ruboss;
   import org.ruboss.controllers.RubossApplicationController;
   import org.ruboss.utils.RubossUtils;
+  
+  import pomodo.commands.*;
+  import pomodo.models.*;
 
   public class ApplicationController extends RubossApplicationController {
     private static var controller:ApplicationController;
     
-    public static var models:Array = [Location, Note, Project, Task]; /* Models */
+    public static var models:Array = [Address, Project, ProjectCategory, Sprint, Task, Workunit]; /* Models */
     
     public static var commands:Array = []; /* Commands */
     

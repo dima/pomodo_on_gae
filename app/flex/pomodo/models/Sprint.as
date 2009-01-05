@@ -2,30 +2,33 @@ package pomodo.models {
   import org.ruboss.collections.ModelsCollection;
   import org.ruboss.models.RubossModel;
   
-  [Resource(name="projects")]
+  [Resource(name="sprints")]
   [Bindable]
-  public class Project extends RubossModel {
+  public class Sprint extends RubossModel {
     public static const LABEL:String = "name";
-    public static const ANY:Project = new Project("Any");
     
     public var name:String;
 
-    public var notes:String;
-
-    public var completed:Boolean;
+    [DateTime]
+    public var dueBy:Date = new Date;
 
     public var billedHourlyRate:int;
-    
+
+    [Lazy]
     [BelongsTo]
-    public var projectCategory:ProjectCategory;
+    public var project:Project;
 
     [HasMany]
-    public var sprints:ModelsCollection;
+    public var tasks:ModelsCollection;
     
-    public function Project(name:String = "") {
+    public function Sprint() {
       super(LABEL);
-      this.name = name;
-    }    
+    }
+    
+    [Ignored]
+    public function get qualifiedName():String {
+      return project.name + ": " + name;
+    }
     
     [Ignored]
     public function get computedTotalTime():Number {
@@ -69,8 +72,8 @@ package pomodo.models {
     
     private function computeTotal(property:String):Number {
       var total:Number = new Number(0);
-      for each (var sprint:Sprint in sprints) {
-        total += sprint[property];
+      for each (var task:Task in tasks) {
+        total += task[property];
       }
       return total;
     }
