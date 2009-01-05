@@ -24,7 +24,6 @@ __author__ = 'Dima Berastau'
 
 from google.appengine.ext import db
 from google.appengine.api import users
-from app.models import account
 import datetime
 
 # Some useful module methods
