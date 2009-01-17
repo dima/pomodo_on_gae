@@ -19,7 +19,7 @@ class Controller(restful.Controller):
     restful.send_successful_response(self, model.to_xml())
     
   def put(self):
-    model = workunit.Workunit.get(db.Key(restful.get_model_key(self)))
+    model = workunit.Workunit.get_or_insert(db.Key(restful.get_model_key(self)))
     assist.update_model_from_params(model, self.request.params)
     restful.send_successful_response(self, model.to_xml())
     

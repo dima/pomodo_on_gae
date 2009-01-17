@@ -5,16 +5,17 @@
   layout="horizontal" styleName="plain" preinitialize="init()">
   <mx:Script>
     <![CDATA[
-      import pomodo.controllers.ModelsController;
-      import org.ruboss.Ruboss;
+      import org.restfulx.Rx;
+      import org.restfulx.services.http.GAEHTTPServiceProvider;
+
       import pomodo.components.main.App;
+      import pomodo.controllers.ApplicationController;
+      import pomodo.controllers.ModelsController;
       import pomodo.controllers.TaskTracker;
       import pomodo.controllers.StatisticsController;
-      import org.ruboss.services.http.GAEHTTPServiceProvider;
-      import pomodo.controllers.ApplicationController;
 
       private function init():void {
-        Ruboss.enableLogging();
+        Rx.enableLogging();
         ApplicationController.initialize([GAEHTTPServiceProvider], GAEHTTPServiceProvider.ID);
       }
 

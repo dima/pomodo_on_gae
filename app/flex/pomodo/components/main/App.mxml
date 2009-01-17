@@ -6,25 +6,25 @@
   </mx:Metadata>
   <mx:Script>
     <![CDATA[
-      import org.ruboss.utils.RubossUtils;
+      import org.restfulx.utils.RxUtils;
       import mx.controls.ComboBox;
       import mx.core.Application;
       import mx.managers.PopUpManager;
       import mx.events.ListEvent;
       import pomodo.models.Task;
       import pomodo.models.Project;
-      import org.ruboss.Ruboss;
+      import org.restfulx.Rx;
 
       public function logout():void {
         Pomodo.tracker.stopWork(stopWorkAndLogOut);
       }
       
       private function stopWorkAndLogOut(result:Object):void {
-        Ruboss.http(onLogout).invoke({URL: "sessions.fxml", method: "DELETE"});
+        Rx.http(onLogout).invoke({URL: "sessions.fxml", method: "DELETE"});
       }
       
       private function onLogout(result:Object):void {
-        RubossUtils.navToURL(XML(result).toString());
+        RxUtils.navToURL(XML(result).toString());
       }
       
       private function toggleWorkOnSelectedTask(event:MouseEvent):void {

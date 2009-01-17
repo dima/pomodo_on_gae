@@ -1,32 +1,28 @@
-require 'rubygems'
-require 'ruboss4ruby/tasks'
+require 'restfulx/tasks'
 
 TEST_APP_NAME = 'TestApp.mxml'
 
 namespace :air do
   desc "Build and run the AIR application"
-  task :run => ["ruboss:air:build", "ruboss:air:run"]
+  task :run => ["rx:air:build", "rx:air:run"]
 end
 
 namespace :flex do
   desc "Test flex application"
-  task :test => ["ruboss:test:build", "ruboss:test:run"]
+  task :test => ["rx:test:build", "rx:test:run"]
   
   desc "Build flex application"
-  task :build do
-    libs = [] # < '/Users/Dima/Projects/ruboss/ruboss_framework/framework/bin/ruboss.swc'
-    compile_app(get_executable('mxmlc'), 'bin-debug', "-library-path+=#{libs.join(',')}")  
-  end
+  task :build => ["rx:flex:build"]
 end
 
-namespace :ruboss do 
+namespace :rx do 
   namespace :test do
     desc "Build flex test swf file"
     task :build do
       project_path = File.join(APP_ROOT, "app/flex", TEST_APP_NAME)
     
       libs = Dir.glob(File.join(APP_ROOT, 'lib', '*.swc'))
-      #libs << '/Users/Dima/Projects/ruboss/ruboss_framework/framework/bin/ruboss.swc'
+      #libs << '/Users/Dima/Projects/restfulx/restfulx_framework/framework/bin/restfulx.swc'
     
       target_project_path = File.join(APP_ROOT, "bin-debug", TEST_APP_NAME.sub(/.mxml$/, '.swf'))
     

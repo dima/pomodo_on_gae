@@ -9,7 +9,7 @@ rescue LoadError
 end
 require 'rubigen/scripts/generate'
 require 'activesupport'
-require 'ruboss4ruby'
+require 'restfulx'
 
 ARGV.shift if ['--help', '-h'].include?(ARGV[0])
 
