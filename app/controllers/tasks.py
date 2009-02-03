@@ -14,7 +14,7 @@ class Controller(restful.Controller):
     
   @restful.methods_via_query_allowed
   def post(self):
-    model = task.Task()
+    model = task.Task(key_name = restful.gen_new_key())
     assist.update_model_from_params(model, self.request.params)
     restful.send_successful_response(self, model.to_xml())
     

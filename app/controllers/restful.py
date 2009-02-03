@@ -39,6 +39,7 @@ __author__ = 'William T. Katz'
 from google.appengine.ext import webapp
  
 import logging
+import uuid
  
 # Some useful module methods
 def send_successful_response(handler, response):
@@ -46,6 +47,9 @@ def send_successful_response(handler, response):
     handler.response.headers["Content-Type"] = "application/xml"
     handler.response.out.write('<?xml version="1.0" encoding="UTF-8"?>')
     handler.response.out.write(response)
+    
+def gen_new_key():
+  return str(uuid.uuid1()).replace("-", "")
     
 def get_model_key(handler):
   return handler.request.path_info.split("/").pop().replace(".xml", "")
